@@ -15,7 +15,7 @@ const register = (server, options, next) => {
   			})
   		}
     })
-		innerRoute.nested = (prefixNested: string) => makeRoutes(prefix + prefixNested)
+		innerRoute.nested = (prefixNested) => makeRoutes(prefix + prefixNested)
 		return innerRoute
 	}
 	server.root.route = makeRoutes()
