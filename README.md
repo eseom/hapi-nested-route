@@ -35,7 +35,7 @@ server.route({
 });
 
 // do nest!
-nestedRoute = server.route.nested('/api')
+const nestedRoute = server.route.nested('/api')
 nestedRoute({
   path: '/ok2', // generated path is /api/ok2
   method: 'get',
@@ -55,6 +55,16 @@ nestedRoute.get('/ok3/{id}', { // generated path is /api/ok3/{id}
   }
 }, (request, reply) => {
 	reply(request.params.id)
+})
+
+// you can also nest from already nested router
+const doubleNestedRoute = nestedRoute.nested('/user')
+doubleNestedRoute({
+  path: '/show', // generated path is /api/user/show
+  method: 'get',
+  handler: (request, reply) => {
+    reply('howdy!')
+  }
 })
 ```
 
