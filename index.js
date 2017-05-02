@@ -2,7 +2,10 @@ const register = (server, options, next) => {
   const origRoute = server.root.route
   const makeRoutes = (prefix = '') => {
     const methods = ['get', 'post', 'put', 'del', 'any']
-    const innerRoute = (routeOptions) => origRoute(routeOptions)
+    const innerRoute = (routeOptions) => {
+      routeOptions.path = `${prefix}${routeOptions.path}`
+      origRoute(routeOptions)
+    }
 
     Object.keys(origRoute).forEach((k) => {
       innerRoute[k] = origRoute[k];
