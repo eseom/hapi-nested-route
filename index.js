@@ -4,7 +4,7 @@ const register = (server, options, next) => {
     const methods = ['get', 'post', 'put', 'del', 'any']
     const innerRoute = (routeOptions) => {
       routeOptions.path = `${prefix}${routeOptions.path}`
-      origRoute(routeOptions)
+      origRoute.apply(server, [routeOptions])
     }
 
     Object.keys(origRoute).forEach((k) => {
@@ -16,13 +16,13 @@ const register = (server, options, next) => {
       if (hm === 'any') method = '*'
       if (hm === 'del') method = 'delete' 
       innerRoute[hm] = (path, config, handler) => {
-        return origRoute({      
-          path: `${prefix}${path}`,     
-          method,                       
-          handler,                      
-          config,                       
-        })                      
-      }          
+        return origRoute.apply(server.root, [{
+          path: `${prefix}${path}`,
+          method,
+          handler,
+          config,
+        }])
+      }
     })
     innerRoute.nested = (prefixNested) => makeRoutes(prefix + prefixNested)
     return innerRoute
